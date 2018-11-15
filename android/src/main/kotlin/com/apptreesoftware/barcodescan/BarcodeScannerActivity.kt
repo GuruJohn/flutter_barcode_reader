@@ -32,7 +32,12 @@ class BarcodeScannerActivity : Activity(), ZXingScannerView.ResultHandler {
         setContentView(scannerView)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean 
+    {
+        run {
+            val item = menu.add(0, TOGGLE_CAMERA, 0, "Swap Camera: 0")
+            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+        }
 
         if (scannerView.flash) {
             val item = menu.add(0,
@@ -44,9 +49,6 @@ class BarcodeScannerActivity : Activity(), ZXingScannerView.ResultHandler {
             item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
         }
 
-        val item = menu.add(0, TOGGLE_CAMERA, 0, "Camera 1")
-        item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -56,6 +58,14 @@ class BarcodeScannerActivity : Activity(), ZXingScannerView.ResultHandler {
             this.invalidateOptionsMenu()
             return true
         }
+
+        if (item.itemId == TOGGLE_CAMERA) {
+            scannerView.startCamera(1)
+            // scannerView.flash = !scannerView.flash
+            this.invalidateOptionsMenu()
+            return true
+        }
+
         return super.onOptionsItemSelected(item)
     }
 
