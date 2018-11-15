@@ -20,6 +20,7 @@ class BarcodeScannerActivity : Activity(), ZXingScannerView.ResultHandler {
     companion object {
         val REQUEST_TAKE_PHOTO_CAMERA_PERMISSION = 100
         val TOGGLE_FLASH = 200
+        val TOGGLE_CAMERA = 300
 
     }
 
@@ -32,6 +33,7 @@ class BarcodeScannerActivity : Activity(), ZXingScannerView.ResultHandler {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
+
         if (scannerView.flash) {
             val item = menu.add(0,
                     TOGGLE_FLASH, 0, "Flash Off")
@@ -41,6 +43,10 @@ class BarcodeScannerActivity : Activity(), ZXingScannerView.ResultHandler {
                     TOGGLE_FLASH, 0, "Flash On")
             item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
         }
+
+        val item = menu.add(0, TOGGLE_CAMERA, 0, "Camera 1")
+        item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+
         return super.onCreateOptionsMenu(menu)
     }
 
