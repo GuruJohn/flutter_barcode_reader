@@ -23,7 +23,7 @@ class BarcodeScannerActivity : Activity(), ZXingScannerView.ResultHandler {
         val REQUEST_TAKE_PHOTO_CAMERA_PERMISSION = 100
         val TOGGLE_FLASH = 200
         val TOGGLE_CAMERA = 300
-
+        var camera : Int = 0;
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,7 +37,7 @@ class BarcodeScannerActivity : Activity(), ZXingScannerView.ResultHandler {
     override fun onCreateOptionsMenu(menu: Menu): Boolean 
     {
         run {
-            val item = menu.add(0, TOGGLE_CAMERA, 0, "Swap Camera: 0")
+            val item = menu.add(0, TOGGLE_CAMERA, 0, "Swap Camera: " + camera)
             item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
         }
 
@@ -62,9 +62,8 @@ class BarcodeScannerActivity : Activity(), ZXingScannerView.ResultHandler {
         }
 
         if (item.itemId == TOGGLE_CAMERA) {
-            scannerView.startCamera(1)
-            // scannerView.flash = !scannerView.flash
-            Log.d("PROPRO","TOGGLE_CAMERA hit")
+            camera = 1 - camera;
+            scannerView.startCamera(camera)
             this.invalidateOptionsMenu()
             return true
         }
@@ -77,7 +76,7 @@ class BarcodeScannerActivity : Activity(), ZXingScannerView.ResultHandler {
         scannerView.setResultHandler(this)
         // start camera immediately if permission is already given
         if (!requestCameraAccessIfNecessary()) {
-            scannerView.startCamera()
+            scannerView.startCamera(camera)
         }
     }
 
@@ -116,7 +115,7 @@ class BarcodeScannerActivity : Activity(), ZXingScannerView.ResultHandler {
         when (requestCode) {
             REQUEST_TAKE_PHOTO_CAMERA_PERMISSION -> {
                 if (PermissionUtil.verifyPermissions(grantResults)) {
-                    scannerView.startCamera()
+                    scannerView.startCamera(camera)
                 } else {
                     finishWithError("PERMISSION_NOT_GRANTED")
                 }
