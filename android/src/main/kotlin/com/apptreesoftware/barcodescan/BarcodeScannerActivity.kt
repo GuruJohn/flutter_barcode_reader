@@ -9,6 +9,8 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.view.Menu
 import android.view.MenuItem
+import android.util.Log
+
 import com.google.zxing.Result
 import me.dm7.barcodescanner.zxing.ZXingScannerView
 
@@ -62,6 +64,7 @@ class BarcodeScannerActivity : Activity(), ZXingScannerView.ResultHandler {
         if (item.itemId == TOGGLE_CAMERA) {
             scannerView.startCamera(1)
             // scannerView.flash = !scannerView.flash
+            Log.d("PROPRO","TOGGLE_CAMERA hit")
             this.invalidateOptionsMenu()
             return true
         }
