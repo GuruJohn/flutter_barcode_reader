@@ -63,6 +63,7 @@ class BarcodeScannerActivity : Activity(), ZXingScannerView.ResultHandler {
 
         if (item.itemId == TOGGLE_CAMERA) {
             camera = 1 - camera;
+            scannerView.stopCamera()
             scannerView.startCamera(camera)
             this.invalidateOptionsMenu()
             return true
