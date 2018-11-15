@@ -39,9 +39,11 @@ class BarcodeScanPlugin(val activity: Activity): MethodCallHandler,
   override fun onActivityResult(code: Int, resultCode: Int, data: Intent?): Boolean {
     if (code == 100) {
       if (resultCode == Activity.RESULT_OK) {
+        Log.d("Scan result: " + code)
         val barcode = data?.getStringExtra("SCAN_RESULT")
         barcode?.let { this.result?.success(barcode) }
       } else {
+        Log.d("Scan result: " + code)
         val errorCode = data?.getStringExtra("ERROR_CODE")
         this.result?.error(errorCode, null, null)
       }
