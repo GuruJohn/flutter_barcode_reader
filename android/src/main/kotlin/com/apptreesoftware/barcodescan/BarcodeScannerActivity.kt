@@ -14,6 +14,8 @@ import android.util.Log
 import com.google.zxing.Result
 import me.dm7.barcodescanner.zxing.ZXingScannerView
 
+import java.util.*
+import kotlin.concurrent.schedule
 
 class BarcodeScannerActivity : Activity(), ZXingScannerView.ResultHandler {
 
@@ -34,7 +36,7 @@ class BarcodeScannerActivity : Activity(), ZXingScannerView.ResultHandler {
         setContentView(scannerView)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean
     {
         run {
             val item = menu.add(0, TOGGLE_CAMERA, 0, "Swap Camera: " + camera)
@@ -63,11 +65,20 @@ class BarcodeScannerActivity : Activity(), ZXingScannerView.ResultHandler {
 
         if (item.itemId == TOGGLE_CAMERA) {
             camera = 1 - camera;
-            //scannerView.stopCamera()
-            scannerView.startCamera(camera)
-            scannerView.setAutoFocus(true)
-            setContentView(scannerView)
+            scannerView.stopCameraPreview()
+            scannerView.stopCamera()
+
             this.invalidateOptionsMenu()
+
+            Thread.sleep(500)
+
+            // Timer().schedule(1000)
+            // {
+                // scannerView.setAutoFocus(true)
+                scannerView.startCamera(camera)
+                // setContentView(scannerView)
+                // scannerView.resumeCameraPreview()
+            // }
             return true
         }
 
