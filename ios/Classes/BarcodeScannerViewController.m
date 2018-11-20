@@ -101,11 +101,17 @@
 }
 
 - (void)addSwapCameraButton {
-
-    self.navigationItem.rightBarButtonItems =
-    [self.navigationItem.rightBarButtonItems arrayByAddingObject: [[UIBarButtonItem alloc] initWithTitle:@"Swap Camera"
-                                                                                           style:UIBarButtonItemStylePlain
-                                                                                           target:self action:@selector(toggleCamera)]];
+     if (!self.hasTorch)
+     {
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Swap Camera"
+                                                                                  style:UIBarButtonItemStylePlain
+                                                                                 target:self action:@selector(toggleCamera)];
+     } else {
+        self.navigationItem.rightBarButtonItems =
+        [self.navigationItem.rightBarButtonItems arrayByAddingObject: [[UIBarButtonItem alloc] initWithTitle:@"Swap Camera"
+                                                                                            style:UIBarButtonItemStylePlain
+                                                                                            target:self action:@selector(toggleCamera)]];
+     }
 
 }
 
