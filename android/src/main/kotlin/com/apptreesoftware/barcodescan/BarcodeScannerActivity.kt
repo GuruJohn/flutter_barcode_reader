@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
+import android.view.View
 import android.view.Menu
 import android.view.MenuItem
 import android.util.Log
@@ -64,21 +65,22 @@ class BarcodeScannerActivity : Activity(), ZXingScannerView.ResultHandler {
         }
 
         if (item.itemId == TOGGLE_CAMERA) {
+            val blankView : View = View(this);
+            setContentView(blankView);
+
             camera = 1 - camera;
-            scannerView.stopCameraPreview()
             scannerView.stopCamera()
+
+            Thread.sleep(1000)
+
+            scannerView = ZXingScannerView(this)
+            scannerView.setAutoFocus(true)
+            scannerView.setResultHandler(this)
+            setContentView(scannerView)
+            scannerView.startCamera(camera)
 
             this.invalidateOptionsMenu()
 
-            Thread.sleep(500)
-
-            // Timer().schedule(1000)
-            // {
-                // scannerView.setAutoFocus(true)
-                scannerView.startCamera(camera)
-                // setContentView(scannerView)
-                // scannerView.resumeCameraPreview()
-            // }
             return true
         }
 
