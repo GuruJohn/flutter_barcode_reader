@@ -13,6 +13,7 @@ import android.view.MenuItem
 import android.util.Log
 
 import com.google.zxing.Result
+import com.yourcompany.barcodescan.R
 import me.dm7.barcodescanner.zxing.ZXingScannerView
 
 import java.util.*
@@ -42,16 +43,24 @@ class BarcodeScannerActivity : Activity(), ZXingScannerView.ResultHandler {
         run {
             val item = menu.add(0, TOGGLE_CAMERA, 0, "Swap Camera: " + camera)
             item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+            if (camera == 0) {
+                item.setIcon(ContextCompat.getDrawable(this, R.drawable.ic_camera_front_white_24dp))
+            }
+            else {
+                item.setIcon(ContextCompat.getDrawable(this, R.drawable.ic_camera_rear_white_24dp))
+            }
         }
 
         if (scannerView.flash) {
             val item = menu.add(0,
                     TOGGLE_FLASH, 0, "Flash Off")
             item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+            item.setIcon(ContextCompat.getDrawable(this, R.drawable.ic_flash_off_white_24dp))
         } else {
             val item = menu.add(0,
                     TOGGLE_FLASH, 0, "Flash On")
             item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+            item.setIcon(ContextCompat.getDrawable(this, R.drawable.ic_flash_on_white_24dp))
         }
 
         return super.onCreateOptionsMenu(menu)
