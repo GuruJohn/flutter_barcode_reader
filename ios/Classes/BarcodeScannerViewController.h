@@ -15,6 +15,5 @@
 @property(nonatomic, retain) MTBBarcodeScanner *scanner;
 @property(nonatomic, weak) id<BarcodeScannerViewControllerDelegate> delegate;
 
-  
   -(id) initWithOptions:(NSDictionary *) options;
 @end
