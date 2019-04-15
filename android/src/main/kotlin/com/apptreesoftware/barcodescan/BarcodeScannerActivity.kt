@@ -9,9 +9,10 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import com.google.zxing.Result
 import me.dm7.barcodescanner.zxing.ZXingScannerView
-
+import com.yourcompany.barcodescan.R
 
 class BarcodeScannerActivity : Activity(), ZXingScannerView.ResultHandler {
 
@@ -20,7 +21,8 @@ class BarcodeScannerActivity : Activity(), ZXingScannerView.ResultHandler {
     companion object {
         val REQUEST_TAKE_PHOTO_CAMERA_PERMISSION = 100
         val TOGGLE_FLASH = 200
-
+        val TOGGLE_CAMERA = 300
+        var camera : Int = 0;
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,14 +36,26 @@ class BarcodeScannerActivity : Activity(), ZXingScannerView.ResultHandler {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
+
+        val item = menu.add(0, TOGGLE_CAMERA, 0, "Swap Camera: " + camera)
+        item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+        if (camera == 0) {
+            item.setIcon(ContextCompat.getDrawable(this, R.drawable.ic_camera_front_white_24dp ))
+        }
+        else {
+            item.setIcon(ContextCompat.getDrawable(this, R.drawable.ic_camera_rear_white_24dp ))
+        }
+
         if (scannerView.flash) {
             val item = menu.add(0,
                     TOGGLE_FLASH, 0, "Flash Off")
             item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+            item.setIcon(ContextCompat.getDrawable(this, R.drawable.ic_flash_off_white_24dp))
         } else {
             val item = menu.add(0,
                     TOGGLE_FLASH, 0, "Flash On")
             item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+            item.setIcon(ContextCompat.getDrawable(this, R.drawable.ic_flash_on_white_24dp))
         }
         return super.onCreateOptionsMenu(menu)
     }
@@ -52,6 +66,27 @@ class BarcodeScannerActivity : Activity(), ZXingScannerView.ResultHandler {
             this.invalidateOptionsMenu()
             return true
         }
+
+        if (item.itemId == TOGGLE_CAMERA) {
+            val blankView : View = View(this);
+            setContentView(blankView);
+
+            camera = 1 - camera;
+            scannerView.stopCamera()
+
+            Thread.sleep(1000)
+
+            scannerView = ZXingScannerView(this)
+            scannerView.setAutoFocus(true)
+            scannerView.setResultHandler(this)
+            setContentView(scannerView)
+            scannerView.startCamera(camera)
+
+            this.invalidateOptionsMenu()
+
+            return true
+        }
+
         return super.onOptionsItemSelected(item)
     }
 
@@ -60,7 +95,7 @@ class BarcodeScannerActivity : Activity(), ZXingScannerView.ResultHandler {
         scannerView.setResultHandler(this)
         // start camera immediately if permission is already given
         if (!requestCameraAccessIfNecessary()) {
-            scannerView.startCamera()
+            scannerView.startCamera(camera)
         }
     }
 
@@ -99,7 +134,7 @@ class BarcodeScannerActivity : Activity(), ZXingScannerView.ResultHandler {
         when (requestCode) {
             REQUEST_TAKE_PHOTO_CAMERA_PERMISSION -> {
                 if (PermissionUtil.verifyPermissions(grantResults)) {
-                    scannerView.startCamera()
+                    scannerView.startCamera(camera)
                 } else {
                     finishWithError("PERMISSION_NOT_GRANTED")
                 }

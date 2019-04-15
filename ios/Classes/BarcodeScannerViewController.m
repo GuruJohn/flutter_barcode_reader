@@ -44,6 +44,8 @@
     self.scanner = [[MTBBarcodeScanner alloc] initWithPreviewView:_previewView];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel)];
   [self updateFlashButton];
+  [self addSwapCameraButton];
+
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -98,6 +100,22 @@
                                                                                   style:UIBarButtonItemStylePlain
                                                                                  target:self action:@selector(toggle)];
     }
+
+}
+- (void)addSwapCameraButton {
+     if (!self.hasTorch)
+     {
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera
+                                                                                 target:self action:@selector(toggleCamera)];
+     } else {
+        self.navigationItem.rightBarButtonItems =
+        [self.navigationItem.rightBarButtonItems arrayByAddingObject: [[UIBarButtonItem alloc]  initWithBarButtonSystemItem:UIBarButtonSystemItemCamera
+                                                                                            target:self action:@selector(toggleCamera)]];
+     }
+}
+
+- (void)toggleCamera {
+    [self.scanner flipCamera];
 }
 
 - (void)toggle {
